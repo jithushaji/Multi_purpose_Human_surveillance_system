@@ -4,5 +4,8 @@ The aim is to make a device which can improve the scope of currently available s
 
 for example :
   you can set the device for house hold surveillance in which it can identify if the person belongs to the family or not, it will serve as a good security system.
-  also
-  In a public place this device can recognize a person and check whether he has any criminal records on the database
+  also In a public place this device can recognize a person and check whether he has any criminal records on the database
+
+### TO DO
+* allerting system
+* UI
