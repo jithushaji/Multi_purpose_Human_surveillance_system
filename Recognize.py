@@ -50,7 +50,7 @@ def recognize_face():
                 tt = str(Id)
                 confstr = "  {0}%".format(round(100 - conf))
 
-            if (100-conf) > 40:
+            if (100-conf) > 20:
                 ts = time.time()
                 date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
                 timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
@@ -63,13 +63,13 @@ def recognize_face():
                 cursor.execute(query3,val)
                 connection.commit()
 
-            tt = str(tt)[2:-2]
+            tt = str(tt) #[2:-2]
 
 
             if(100-conf) > 30:
-                cv2.putText(im, str(tt), (x+5,y-5), font, 1, (255, 255, 255), 2)
+                cv2.putText(im, str(tt), (x+5,y-5), font, 0.5, (255, 255, 255), 2)
             else:
-                cv2.putText(im, str(tt), (x + 5, y - 5), font, 1, (255, 255, 255), 2)
+                cv2.putText(im, str(tt), (x + 5, y - 5), font, 0.5, (255, 255, 255), 2)
 
             if (100-conf) > 27:
                 cv2.putText(im, str(confstr), (x + 5, y + h - 5), font,1, (0, 255, 0),1 )
