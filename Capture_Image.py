@@ -72,9 +72,8 @@ def takeImages():
         saverow="INSERT INTO Identity (ID,Name,age,gender,remark) VALUES (?, ?, ?, ?, ?)"
         cursor.execute(saverow,row)
         connection.commit()
-        connection.close()
     else:
         print("Check Entered Data")
-
+    #connection.close()
 
 
