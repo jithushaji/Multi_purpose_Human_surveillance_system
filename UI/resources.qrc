@@ -1,0 +1,13 @@
+<RCC>
+  <qresource>
+    <file>resources/quit.png</file>
+    <file>resources/process images.png</file>
+    <file>resources/checkcam.png</file>
+    <file>resources/cctv1.png</file>
+    <file>resources/cctv2.png</file>
+    <file>resources/add_user.png</file>
+    <file>resources/cam.png</file>
+    <file>resources/folder.png</file>
+    <file>resources/user.png</file>
+  </qresource>
+</RCC>
