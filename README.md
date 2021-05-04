@@ -8,4 +8,3 @@ for example :
 
 ### TO DO
 * allerting system
-* UI
