@@ -3,6 +3,7 @@ import sqlite3
 import cv2
 import os
 import imutils
+import AddToDB_ui
 
 createtable="""CREATE TABLE IF NOT EXISTS Identity (ID INTEGER PRIMARY KEY,Name TEXT NOT NULL,age INTEGER,gender TEXT,remark TEXT);"""
 connection=sqlite3.connect("survilance.db")
@@ -30,14 +31,22 @@ def is_number(s):
 
 # Take image function
 
-def takeImages():
+def takeImages(self):
 
 
-    Id = input("Enter Id: ")
-    name = input("Enter Name: ")
-    age=input("Enter age:")
-    gender=input("Enter gender:")
-    remark=input("Enter remark:")
+    Id =  self.lineEdit.text()
+    name = self.lineEdit_2.text()
+    age = self.lineEdit_4.text()
+    if (self.radioButton.isChecked() == True):
+        gender = self.radioButton.text()
+    elif (self.radioButton_2.isChecked() == True):
+        gender = self.radioButton_2.text()
+    elif (self.radioButton_3.isChecked() == True):
+        gender = self.radioButton_3.text()
+    else:
+        gender = "NULL"
+    
+    remark=self.lineEdit_5.text()
 
     if(is_number(Id) and remark.isalpha()):
         cam = cv2.VideoCapture(0)
