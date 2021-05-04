@@ -83,6 +83,6 @@ def recognize_face():
         if (cv2.waitKey(1) == ord('q')):
             break
     connection.close()
-    print("Success")
+    print("TERMINATING.......")
     cam.release()
     cv2.destroyAllWindows()
