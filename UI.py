@@ -28,6 +28,7 @@ class Window(QMainWindow, Ui_MainWindow):
 
 
         self.actionAdd.triggered.connect(self.AddToDB)
+        self.pushButton.clicked.connect(self.camera)
 
 
 
@@ -36,8 +37,27 @@ class Window(QMainWindow, Ui_MainWindow):
         dialog = AddToDBDialog(self)
 
         dialog.exec()
-
-
+    
+    def camera(self):
+        
+        import check_camera
+        check_camera.camer()
+        
+    def capture(self):
+        
+        import Capture_Image
+        Capture_Image.takeImages()
+        
+        
+    def train(self):
+        
+        import Train_Image
+        Train_Image.TrainImages()
+        
+    def recognize(self):
+        
+        import Recognize
+        Recognize.recognize_face()
 
 
 class AddToDBDialog(QDialog):
