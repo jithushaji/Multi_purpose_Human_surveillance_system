@@ -14,11 +14,19 @@ def recognize_face():
     faceCascade = cv2.CascadeClassifier(harcascadePath)
     connection=sqlite3.connect("survilance.db")
     font = cv2.FONT_HERSHEY_SIMPLEX
-    query="CREATE TABLE IF NOT EXISTS Recognized (ID INTEGER PRIMARY KEY ,Name TEXT NOT NULL,Age INTEGER,Gender TEXT,Remark TEXT,Time Text);"
+    str1="employee"
+    
+    query="CREATE TABLE IF NOT EXISTS Recognized (ID PRIMARY KEY,Name TEXT NOT NULL,Age INTEGER,Gender TEXT,Remark TEXT,Time Text);"
+    query1="CREATE TABLE IF NOT EXISTS Loggedin (ID PRIMARY KEY,Name TEXT NOT NULL,Time Text)"
     cursor=connection.cursor()
     cursor.execute(query)
+    cursor.execute(query1)
     query2="SELECT * FROM Identity WHERE ID=?"
     query3="INSERT OR IGNORE INTO Recognized (ID,Name,Age,Gender,Remark,Time) VALUES (? ,?, ?, ?, ?, ?)"
+    query4="INSERT OR IGNORE INTO Loggedin (ID,Name,Time) VALUES (? ,?, ?)"
+    
+    connection.commit()
+    
 
     # Initialize and start realtime video capture
     cam = cv2.VideoCapture(0)
@@ -50,36 +58,38 @@ def recognize_face():
                 tt = str(Id)
                 confstr = "  {0}%".format(round(100 - conf))
 
-            if (100-conf) > 20:
+            if (100-conf) > 10:
+                cv2.putText(im, str(tt), (x+5,y-5), font, 0.5, (255, 255, 255), 2) #printing name on display
                 ts = time.time()
                 date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
-                timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
+                timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M')
+                hour = int(timeStamp.split(':')[0])
                 for dat in records:
                     Name=dat[1]
                     Age=dat[2]
                     Gender=dat[3]
                     Remark=dat[4]
+                    Auth=dat[5]
                 val=(Id,Name,Age,Gender,Remark,timeStamp)
-                cursor.execute(query3,val)
+                val1=(Id,Name,timeStamp)
+                if (Remark == str1) and (hour<12): # adding employee login time
+                    cursor.execute(query4,val1)    
+                cursor.execute(query3,val) # adding detections to detection database
                 connection.commit()
-
+                ### code to alert if system detecs an unauthorized person after a set time
+    
+                
+                if (hour >= 18) and (Auth != 1):
+                    print("unauthorized")
+                else:
+                    print("Authorized")
+                
             tt = str(tt) #[2:-2]
 
 
-            if(100-conf) > 30:
-                cv2.putText(im, str(tt), (x+5,y-5), font, 0.5, (255, 255, 255), 2)
-            else:
-                cv2.putText(im, str(tt), (x + 5, y - 5), font, 0.5, (255, 255, 255), 2)
-
-            if (100-conf) > 27:
-                cv2.putText(im, str(confstr), (x + 5, y + h - 5), font,1, (0, 255, 0),1 )
-            elif (100-conf) > 20:
-                cv2.putText(im, str(confstr), (x + 5, y + h - 5), font, 1, (0, 255, 255), 1)
-            else:
-                cv2.putText(im, str(confstr), (x + 5, y + h - 5), font, 1, (0, 0, 255), 1)
-
-
+        cv2.namedWindow('Recognizer', cv2.WINDOW_KEEPRATIO)
         cv2.imshow('Recognizer', im)
+        cv2.resizeWindow('Recognizer',300,300)
         if (cv2.waitKey(1) == ord('q')):
             break
     connection.close()
