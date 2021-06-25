@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import veriables 
 
 class Ui_option_Dialog(object):
     def setupUi(self, Dialog):
@@ -24,15 +24,58 @@ class Ui_option_Dialog(object):
         self.checkBox = QtWidgets.QCheckBox(self.verticalLayoutWidget)
         self.checkBox.setObjectName("checkBox")
         self.verticalLayout.addWidget(self.checkBox)
+        self.checkBox.stateChanged.connect(self.clickBox)
+        if (veriables.option[0]==1):
+            self.checkBox.setChecked(True)
         self.checkBox_2 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
         self.checkBox_2.setObjectName("checkBox_2")
         self.verticalLayout.addWidget(self.checkBox_2)
+        self.checkBox_2.stateChanged.connect(self.clickBox2)
+        if (veriables.option[1]==1):
+            self.checkBox_2.setChecked(True)
 
+#         if (self.checkBox.isChecked() == True):
+#             veriables.option[0]=1
+#             
+#         else:
+#             veriables.option[0]=0
+#             
+#         if (self.checkBox_2.isChecked() == True):
+#             veriables.option[1]=1
+#         else:
+#             veriables.option[1]=0
+#             
+#         print(veriables.option[0])
+#         print(veriables.option[1])        
+        
+        
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
+        
+    def clickBox(self, state):
 
+        if state == QtCore.Qt.Checked:
+            veriables.option[0]=1
+            print('Attd Checked')
+        else:
+            print('Attd Unchecked')
+            veriables.option[0]=0
+            
+            
+    def clickBox2(self, state):
+
+        if state == QtCore.Qt.Checked:
+            veriables.option[1]=1
+            #print('Auth Checked')
+        else:
+            print('Auth Unchecked')
+            #veriables.option[1]=0
+    
+            
+            
     def retranslateUi(self, Dialog):
         _translate = QtCore.QCoreApplication.translate
         Dialog.setWindowTitle(_translate("Dialog", "Options"))
         self.checkBox.setText(_translate("Dialog", "Attendance"))
         self.checkBox_2.setText(_translate("Dialog", "Authorization"))
+

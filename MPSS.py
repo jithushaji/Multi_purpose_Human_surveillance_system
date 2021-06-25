@@ -9,7 +9,6 @@ from PyQt5.QtWidgets import (
 
 from PyQt5.uic import loadUi
 
-
 from main_window_ui import Ui_MainWindow
 
 from AddToDB_ui import Ui_Dialog
@@ -109,7 +108,7 @@ class Window(QMainWindow, Ui_MainWindow):
         
         import Recognize
         
-        Recognize.recognize_face()
+        Recognize.recognize_face(self)
         
      
     def Quit(self):

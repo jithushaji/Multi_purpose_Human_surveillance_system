@@ -5,9 +5,15 @@ import imutils
 import cv2
 import pandas as pd
 import sqlite3
+import options_ui
+import veriables
+
 
 #-------------------------
-def recognize_face():
+def recognize_face(self):
+
+    attd = veriables.option[0]
+    auth = veriables.option[1]
     recognizer = cv2.face.LBPHFaceRecognizer_create()
     recognizer.read("TrainingImageLabel"+os.sep+"Trainner.yml")
     harcascadePath = "haarcascade_frontalface_default.xml"
@@ -35,6 +41,8 @@ def recognize_face():
     minH = 0.1 * cam.get(4)
 
     while True:
+        print(attd)
+        print(auth)
         ret, im = cam.read()
         im=imutils.resize(im, width=400)
         gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)

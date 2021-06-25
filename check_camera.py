@@ -25,7 +25,9 @@ def camer():
 
 
         # Display
-        cv2.imshow('Webcam Check', gray)
+        cv2.namedWindow('cam check', cv2.WINDOW_KEEPRATIO)
+        cv2.imshow('cam check', gray)
+        cv2.resizeWindow('cam check',300,300)
 
         # Stop if escape key is pressed
         if cv2.waitKey(1) & 0xFF == ord('q'):

@@ -5,7 +5,7 @@ import os
 import imutils
 import AddToDB_ui
 
-createtable="""CREATE TABLE IF NOT EXISTS Identity (ID INTEGER PRIMARY KEY,Name TEXT NOT NULL,age INTEGER,gender TEXT,remark TEXT);"""
+createtable="""CREATE TABLE IF NOT EXISTS Identity (ID INTEGER PRIMARY KEY,Name TEXT NOT NULL,age INTEGER,gender TEXT,remark TEXT,Authorized INTEGER);"""
 connection=sqlite3.connect("survilance.db")
 cursor=connection.cursor()
 cursor.execute(createtable)
@@ -26,7 +26,6 @@ def is_number(s):
         pass
 
     return False
-
 
 
 # Take image function
@@ -67,7 +66,10 @@ def takeImages(self):
                 cv2.imwrite("TrainingImage" + os.sep +name + "."+Id + '.' +
                             str(sampleNum) + ".jpg", gray[y:y+h, x:x+w])
                 #display the frame
+                
+                cv2.namedWindow('frame', cv2.WINDOW_KEEPRATIO)
                 cv2.imshow('frame', gray)
+                cv2.resizeWindow('frame',300,300)
             #wait for 100 miliseconds
             if cv2.waitKey(100) & 0xFF == ord('q'):
                 break
