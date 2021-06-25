@@ -14,6 +14,8 @@ from main_window_ui import Ui_MainWindow
 
 from AddToDB_ui import Ui_Dialog
 
+from options_ui import Ui_option_Dialog
+
 
 class AddToDBDialog(QDialog, Ui_Dialog):
     
@@ -38,6 +40,17 @@ class AddToDBDialog(QDialog, Ui_Dialog):
         Capture_Image.takeImages(self)
                
 
+class AddOptionDialog(QDialog, Ui_option_Dialog):
+    
+    def __init__(self, parent=None):
+
+        super().__init__(parent)
+        
+        self.setupUi(self)
+        
+        #self.connectSignalsSlots()
+    
+
 class Window(QMainWindow, Ui_MainWindow):
 
     def __init__(self, parent=None):
@@ -53,6 +66,8 @@ class Window(QMainWindow, Ui_MainWindow):
 
         self.actionAdd.triggered.connect(self.AddToDB)
         
+        self.action_File.triggered.connect(self.option)
+        
         self.pushButton.clicked.connect(self.camera)
         
         self.pushButton_2.clicked.connect(self.train)
@@ -62,6 +77,13 @@ class Window(QMainWindow, Ui_MainWindow):
         self.pushButton_4.clicked.connect(self.Quit)
 
 
+    def option(self):
+        
+        self.dialog = AddOptionDialog(self)
+
+        self.dialog.show()
+    
+    
     def AddToDB(self):
 
         self.dialog = AddToDBDialog(self)
