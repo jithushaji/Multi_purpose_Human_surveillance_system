@@ -7,6 +7,7 @@ import pandas as pd
 import sqlite3
 import options_ui
 import veriables
+from mail import *
 
 
 #-------------------------
@@ -20,7 +21,9 @@ def recognize_face(self):
     faceCascade = cv2.CascadeClassifier(harcascadePath)
     connection=sqlite3.connect("survilance.db")
     font = cv2.FONT_HERSHEY_SIMPLEX
+    
     str1="employee"
+    str2="culprit"
     
     query="CREATE TABLE IF NOT EXISTS Recognized (ID PRIMARY KEY,Name TEXT NOT NULL,Age INTEGER,Gender TEXT,Remark TEXT,Time Text);"
     query1="CREATE TABLE IF NOT EXISTS Loggedin (ID PRIMARY KEY,Name TEXT NOT NULL,Time Text)"
@@ -41,13 +44,14 @@ def recognize_face(self):
     minH = 0.1 * cam.get(4)
 
     while True:
-        print(attd)
-        print(auth)
+        
         ret, im = cam.read()
         im=imutils.resize(im, width=400)
         gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
         faces = faceCascade.detectMultiScale(im, 1.2, 5,minSize = (int(minW), int(minH)),flags = cv2.CASCADE_SCALE_IMAGE)
+        
         for(x, y, w, h) in faces:
+            
             cv2.rectangle(im, (x, y), (x+w, y+h), (10, 159, 255), 1)
             Id, conf = recognizer.predict(gray[y:y+h, x:x+w])
             cursor.execute(query2,(Id,))
@@ -66,31 +70,57 @@ def recognize_face(self):
                 tt = str(Id)
                 confstr = "  {0}%".format(round(100 - conf))
 
-            if (100-conf) > 10:
+            if (100-conf) > 10: # detection confidence
+                
                 cv2.putText(im, str(tt), (x+5,y-5), font, 0.5, (255, 255, 255), 2) #printing name on display
                 ts = time.time()
                 date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
                 timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M')
                 hour = int(timeStamp.split(':')[0])
+                
                 for dat in records:
                     Name=dat[1]
                     Age=dat[2]
                     Gender=dat[3]
                     Remark=dat[4]
                     Auth=dat[5]
+                    
                 val=(Id,Name,Age,Gender,Remark,timeStamp)
                 val1=(Id,Name,timeStamp)
-                if (Remark == str1) and (hour<12): # adding employee login time
-                    cursor.execute(query4,val1)    
+                
+                
+                if (Remark == str2): #warning mail if a culprit is detected
+                    #make table 
+                    print("code to warning mail")
+                    # if id is not already in table call send_mail() 
+                    
+                    
+                
+                
+                if (Remark == str1) and (hour<12) and (attd == 1): # adding employee login time
+                    
+                    cursor.execute(query4,val1)
+                    print("attendance")
+                    
                 cursor.execute(query3,val) # adding detections to detection database
                 connection.commit()
                 ### code to alert if system detecs an unauthorized person after a set time
-    
                 
-                if (hour >= 18) and (Auth != 1):
-                    print("unauthorized")
-                else:
-                    print("Authorized")
+                if (hour >= 1) and (auth == 1):
+                    
+                    if (Auth == 1):#if (Auth != 1):   #code to send mail
+                        print ("AUTHORIZED")
+                        
+                    else:
+                        print("UNAUTHORIZED")
+                        # if id not in database call send_mail() 
+    
+                ###save the dagta base in csv format and mail it then drop the tables
+                        
+                if(hour == 24):
+                    
+                    print("mail tables and drop tables")
+                
                 
             tt = str(tt) #[2:-2]
 
@@ -98,8 +128,12 @@ def recognize_face(self):
         cv2.namedWindow('Recognizer', cv2.WINDOW_KEEPRATIO)
         cv2.imshow('Recognizer', im)
         cv2.resizeWindow('Recognizer',300,300)
+        
         if (cv2.waitKey(1) == ord('q')):
+            
             break
+        
+        
     connection.close()
     print("TERMINATING.......")
     cam.release()
