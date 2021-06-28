@@ -33,6 +33,7 @@ def recognize_face(self):
     query2="SELECT * FROM Identity WHERE ID=?"
     query3="INSERT OR IGNORE INTO Recognized (ID,Name,Age,Gender,Remark,Time) VALUES (? ,?, ?, ?, ?, ?)"
     query4="INSERT OR IGNORE INTO Loggedin (ID,Name,Time) VALUES (? ,?, ?)"
+    query5="select exists(select 1 from Recognized where ID=? collate nocase) limit 1"
     
     connection.commit()
     
@@ -76,7 +77,11 @@ def recognize_face(self):
                 ts = time.time()
                 date = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d')
                 timeStamp = datetime.datetime.fromtimestamp(ts).strftime('%H:%M')
-                hour = int(timeStamp.split(':')[0])
+                timeStamp_2 = datetime.datetime.fromtimestamp(ts).strftime('%H:%M:%S')
+                hour = int(timeStamp_2.split(':')[0])
+                minitue = int(timeStamp_2.split(':')[1])
+                second= int(timeStamp_2.split(':')[2])
+                
                 
                 for dat in records:
                     Name=dat[1]
@@ -87,37 +92,42 @@ def recognize_face(self):
                     
                 val=(Id,Name,Age,Gender,Remark,timeStamp)
                 val1=(Id,Name,timeStamp)
+                val2=(Id,)
+                check=cursor.execute(query5,val2)
                 
                 
                 if (Remark == str2): #warning mail if a culprit is detected
-                    #make table 
-                    print("code to warning mail")
-                    # if id is not already in table call send_mail() 
-                    
-                    
                 
+                    if check.fetchone()[0]==0:
+                        print('Not avalaible')
+                        print("sending mail")
+                        Label="Culprit Recognized"
+                        send_mail(Id,Name,Age,Gender,Remark,Label)
+                    # if id is not already in table call send_mail() 
+
                 
                 if (Remark == str1) and (hour<12) and (attd == 1): # adding employee login time
                     
                     cursor.execute(query4,val1)
-                    print("attendance")
+                    #print("attendance")
                     
                 cursor.execute(query3,val) # adding detections to detection database
                 connection.commit()
                 ### code to alert if system detecs an unauthorized person after a set time
                 
-                if (hour >= 1) and (auth == 1):
+                if (hour >= 18) and (auth == 1):
                     
-                    if (Auth == 1):#if (Auth != 1):   #code to send mail
-                        print ("AUTHORIZED")
+                    if (Auth != 1) and (check.fetchone()[0]==0):
                         
-                    else:
-                        print("UNAUTHORIZED")
-                        # if id not in database call send_mail() 
+                        Label="Unautorized Person"
+                        print("send mail")
+                        send_mail(Id,Name,Age,Gender,Remark,Label)
+                        #code to send mail
+  
     
-                ###save the dagta base in csv format and mail it then drop the tables
+                ###save the data base in csv format and mail it then drop the tables
                         
-                if(hour == 24):
+                if(hour == 24) and (minitue == 0) and (second == 0):
                     
                     print("mail tables and drop tables")
                 
