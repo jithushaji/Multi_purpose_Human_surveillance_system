@@ -27,27 +27,13 @@ class Ui_option_Dialog(object):
         self.checkBox.stateChanged.connect(self.clickBox)
         if (veriables.option[0]==1):
             self.checkBox.setChecked(True)
+            
         self.checkBox_2 = QtWidgets.QCheckBox(self.verticalLayoutWidget)
         self.checkBox_2.setObjectName("checkBox_2")
         self.verticalLayout.addWidget(self.checkBox_2)
         self.checkBox_2.stateChanged.connect(self.clickBox2)
         if (veriables.option[1]==1):
-            self.checkBox_2.setChecked(True)
-
-#         if (self.checkBox.isChecked() == True):
-#             veriables.option[0]=1
-#             
-#         else:
-#             veriables.option[0]=0
-#             
-#         if (self.checkBox_2.isChecked() == True):
-#             veriables.option[1]=1
-#         else:
-#             veriables.option[1]=0
-#             
-#         print(veriables.option[0])
-#         print(veriables.option[1])        
-        
+            self.checkBox_2.setChecked(True)        
         
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
@@ -56,10 +42,10 @@ class Ui_option_Dialog(object):
 
         if state == QtCore.Qt.Checked:
             veriables.option[0]=1
-            print('Attd Checked')
+            #print('Attd Checked')
         else:
-            print('Attd Unchecked')
             veriables.option[0]=0
+            #print('Attd Unchecked')
             
             
     def clickBox2(self, state):
@@ -68,8 +54,8 @@ class Ui_option_Dialog(object):
             veriables.option[1]=1
             #print('Auth Checked')
         else:
-            print('Auth Unchecked')
-            #veriables.option[1]=0
+            veriables.option[1]=0
+            #print('Auth Unchecked')
     
             
             

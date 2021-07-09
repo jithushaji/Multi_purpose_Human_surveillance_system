@@ -130,7 +130,7 @@
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;check camera&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
     <property name="text">
-     <string>     Quit</string>
+     <string>Quit</string>
     </property>
     <property name="icon">
      <iconset resource="resources.qrc">
@@ -201,10 +201,10 @@
     </iconset>
    </property>
    <property name="text">
-    <string>File</string>
+    <string>Options</string>
    </property>
    <property name="toolTip">
-    <string>Open File</string>
+    <string>Options</string>
    </property>
   </action>
  </widget>

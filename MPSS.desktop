@@ -1,4 +1,0 @@
-[Desktop Entry]
-Type= Application
-Name= MPSS
-Exec= /usr/bin/python3  MPSS.py

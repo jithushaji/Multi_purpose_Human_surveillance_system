@@ -35,6 +35,10 @@ def recognize_face(self):
     query4="INSERT OR IGNORE INTO Loggedin (ID,Name,Time) VALUES (? ,?, ?)"
     query5="select exists(select 1 from Recognized where ID=? collate nocase) limit 1"
     
+    query6="CREATE TABLE IF NOT EXISTS Authorization (ID PRIMARY KEY)"
+    query7="SELECT * FROM Authorization WHERE ID=?"
+    query8="INSERT OR IGNORE INTO  Authorization (ID) VALUES (?)"
+    
     connection.commit()
     
 
@@ -116,12 +120,19 @@ def recognize_face(self):
                 ### code to alert if system detecs an unauthorized person after a set time
                 
                 if (hour >= 18) and (auth == 1):
-                    
-                    if (Auth != 1) and (check.fetchone()[0]==0):
-                        
+                    cursor.execute(query6)
+                    cursor.execute(query7,val2)
+                    flag=cursor.fetchone()
+                    #print(flag)
+                    if (Auth != 1) and (flag == None):
+                        cursor.execute(query8,val2)
+                        connection.commit()
+                        print("mail")
                         Label="Unautorized Person"
                         print("send mail")
                         send_mail(Id,Name,Age,Gender,Remark,Label)
+                        cursor.execute(query7,val2)
+                        flag=cursor.fetchone()
                         #code to send mail
   
     

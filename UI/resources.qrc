@@ -1,7 +1,7 @@
 <RCC>
   <qresource>
-    <file>resources/quit.png</file>
     <file>resources/process images.png</file>
+    <file>resources/quit.png</file>
     <file>resources/checkcam.png</file>
     <file>resources/cctv1.png</file>
     <file>resources/cctv2.png</file>
