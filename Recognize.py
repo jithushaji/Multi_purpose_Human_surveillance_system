@@ -8,6 +8,7 @@ import sqlite3
 import options_ui
 import veriables
 from mail import *
+from clean_db import *
 
 
 #-------------------------
@@ -134,13 +135,15 @@ def recognize_face(self):
                         cursor.execute(query7,val2)
                         flag=cursor.fetchone()
                         #code to send mail
-  
+                      ###write code to alert if person is not in database
     
                 ###save the data base in csv format and mail it then drop the tables
                         
                 if(hour == 24) and (minitue == 0) and (second == 0):
                     
                     print("mail tables and drop tables")
+                    send_Reco()
+                    send_attd() 
                 
                 
             tt = str(tt) #[2:-2]
